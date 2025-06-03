@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import React from "react";
 import StatsCard from "./_components/StatsCard";
+import { Separator } from "@/components/ui/separator";
 
 const Dashboard = () => {
   return (
@@ -18,6 +19,22 @@ const Dashboard = () => {
             </Button>
           </div>
           <StatsListWrap />
+        </section>
+
+        <div className="mt-10">
+          <Separator className="!border-[#eee] !bg-[#eee]" />
+        </div>
+
+        {/* {ALL FORM} */}
+
+        <section className="w-full pt-7 pb-10">
+          <div className="w-full flex items-center mb-4">
+            <h5 className="text-xl font-semibold tracking-tight ">All Forms</h5>
+          </div>
+
+          <div className="flex items-center justify-center">
+            No From created
+          </div>
         </section>
       </div>
     </div>

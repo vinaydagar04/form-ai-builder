@@ -51,3 +51,10 @@ export async function fetchFormStats() {
     };
   }
 }
+
+export async function createForm(data: { name: string; description: string }) {
+  try {
+    const session = getKindeServerSession();
+    const user = await session.getUser();
+  } catch (error) {}
+}
