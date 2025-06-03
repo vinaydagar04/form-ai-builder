@@ -1,5 +1,6 @@
 "use server";
 
+import { defaultBackgroundColor, defaultPrimaryColor } from "@/constant";
 import { prisma } from "@/lib/prismadb";
 import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 
@@ -56,5 +57,48 @@ export async function createForm(data: { name: string; description: string }) {
   try {
     const session = getKindeServerSession();
     const user = await session.getUser();
-  } catch (error) {}
+    if (!user) {
+      return {
+        success: false,
+        message: "Unauthorized to use this resource",
+      };
+    }
+
+    // const jsonblocks = []
+
+    const formSettings = await prisma.formSettings.create({
+      data: {
+        primaryColor: defaultPrimaryColor,
+        backgroundColor: defaultBackgroundColor,
+      },
+    });
+
+    const form = await prisma.form.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        userId: user.id,
+        creatorName: user?.given_name || "",
+        settingsId: formSettings.id,
+      },
+    });
+
+    if (!form) {
+      return {
+        success: false,
+        message: "Could not create form, please try again",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Form created successfully",
+      form,
+    };
+  } catch (e) {
+    return {
+      success: false,
+      message: "Something went wrong",
+    };
+  }
 }
