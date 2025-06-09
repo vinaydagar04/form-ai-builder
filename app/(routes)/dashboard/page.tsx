@@ -4,6 +4,7 @@ import { PlusIcon } from "lucide-react";
 import React from "react";
 import StatsCard from "./_components/StatsCard";
 import { Separator } from "@/components/ui/separator";
+import CreateForm from "./_components/_common/CreateForm";
 
 const Dashboard = () => {
   return (
@@ -13,10 +14,7 @@ const Dashboard = () => {
         <section className="stats-section w-full">
           <div className="w-full flex items-center justify-between py-5">
             <h1 className="text-3xl font-semibold tracking-tight">Dashboard</h1>
-            <Button className="!bg-primary !font-medium gap-1">
-              <PlusIcon />
-              Create a form
-            </Button>
+            <CreateForm />
           </div>
           <StatsListWrap />
         </section>
