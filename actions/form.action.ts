@@ -103,3 +103,39 @@ export async function createForm(data: { name: string; description: string }) {
   }
 }
 
+export async function fetchAllForms() {
+  try {
+    const session = getKindeServerSession();
+    const user = await session.getUser();
+
+    if (!user) {
+      return {
+        success: false,
+        message: "Unauthorized to use this resource",
+      };
+    }
+
+    const form = await prisma.form.findMany({
+      where: {
+        userId: user.id,
+      },
+      include: {
+        settings: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return {
+      success: true,
+      message: "Form fetched successfully",
+      form,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "Something went wrong",
+    };
+  }
+}

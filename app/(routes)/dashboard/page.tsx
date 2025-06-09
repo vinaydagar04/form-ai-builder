@@ -1,10 +1,11 @@
-import { fetchFormStats } from "@/actions/form.action";
+import { fetchAllForms, fetchFormStats } from "@/actions/form.action";
 import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
-import React from "react";
+import { Loader, PlusIcon } from "lucide-react";
+import React, { Suspense } from "react";
 import StatsCard from "./_components/StatsCard";
 import { Separator } from "@/components/ui/separator";
 import CreateForm from "./_components/_common/CreateForm";
+import FormItem from "./_components/_common/FormItem";
 
 const Dashboard = () => {
   return (
@@ -30,9 +31,18 @@ const Dashboard = () => {
             <h5 className="text-xl font-semibold tracking-tight ">All Forms</h5>
           </div>
 
-          <div className="flex items-center justify-center">
-            No From created
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-3 xl:grid-cols-5">
+            <Suspense
+              fallback={[1, 2, 3, 4].map((item) => (
+                <Loader size="3rem " className="animate-spin" />
+              ))}
+            >
+              <FormList />
+            </Suspense>
           </div>
+          {/* <div className="flex items-center justify-center">
+            No From created
+          </div> */}
         </section>
       </div>
     </div>
@@ -44,4 +54,24 @@ async function StatsListWrap() {
   return <StatsCard loading={false} data={stats} />;
 }
 
+async function FormList() {
+  const { form } = await fetchAllForms();
+  return (
+    <>
+      {form?.map((form) => (
+        <FormItem
+          key={form.id}
+          id={form.id}
+          formId={form.formId}
+          name={form.name}
+          published={form.published}
+          createdAt={form.createdAt}
+          responses={form.responses}
+          views={form.views}
+          backgroundColor={form.settings.backgroundColor}
+        />
+      ))}
+    </>
+  );
+}
 export default Dashboard;
